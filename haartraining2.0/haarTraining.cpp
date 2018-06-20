@@ -1389,8 +1389,6 @@ void icvBoost(int maxweaksplits, int stage_all, CvIntHaarFeatures* haarFeatures,
 	float *eval = new float[num_pos]; //特征累积置信值
 	int *predit_result = new int[sampleNumber];
 	float thresold = 0.5f;
-	int number_pos; //用于循环内计算加和
-					//while(((hitRate_real<=minhitrate)||(maxFalse_real >= maxfalsealarms))&&(T <= 200))
 	cascadeClassifier.size.width = mysize.width;
 	cascadeClassifier.size.height = mysize.height;
 	printf("文件计算\n");
@@ -1399,7 +1397,6 @@ void icvBoost(int maxweaksplits, int stage_all, CvIntHaarFeatures* haarFeatures,
 
 		featurenumber = 0;
 		current_falsealarms = 1.0f;
-		number_pos = 0;
 		printf("******%d执行**********\n", stage);
 		stagethresold.clear();
 		hitRate_real = 0;
@@ -1665,7 +1662,7 @@ void icvBoost(int maxweaksplits, int stage_all, CvIntHaarFeatures* haarFeatures,
 
 			end = clock();
 			printf("feature_thresold:%f,falsealarms:%f,hitrate:%f,featurenumber:%d,time:%f\n", thresold,
-				current_falsealarms, hitRate_real / number_pos, featurenumber, (end - start) / CLOCKS_PER_SEC * 1000);
+				current_falsealarms, hitRate_real / num_pos, featurenumber, (end - start) / CLOCKS_PER_SEC * 1000);
 			featurenumber++;
 			idxstream.close();
 			istream.close();
@@ -1716,8 +1713,6 @@ void icvBoostInMem(int maxweaksplits, int stage_all, CvIntHaarFeatures* haarFeat
 	float *eval = new float[num_pos]; //特征累积置信值
 	int *predit_result = new int[sampleNumber];
 	float thresold = 0.5f;
-	int number_pos; //用于循环内计算加和
-					//while(((hitRate_real<=minhitrate)||(maxFalse_real >= maxfalsealarms))&&(T <= 200))
 	cascadeClassifier.size.width = mysize.width;
 	cascadeClassifier.size.height = mysize.height;
 	printf("内存计算\n");
@@ -1726,7 +1721,6 @@ void icvBoostInMem(int maxweaksplits, int stage_all, CvIntHaarFeatures* haarFeat
 
 		featurenumber = 0;
 		current_falsealarms = 1.0f;
-		number_pos = 0;
 		printf("******%d执行**********\n", stage);
 
 		hitRate_real = 0;
@@ -1959,7 +1953,7 @@ void icvBoostInMem(int maxweaksplits, int stage_all, CvIntHaarFeatures* haarFeat
 
 			end = clock();
 			printf("feature_thresold:%f,falsealarms:%f,hitrate:%f,featurenumber:%d,time:%f\n", thresold,
-				current_falsealarms, hitRate_real/number_pos, featurenumber, (end - start) / CLOCKS_PER_SEC * 1000);
+				current_falsealarms, hitRate_real/num_pos, featurenumber, (end - start) / CLOCKS_PER_SEC * 1000);
 			featurenumber++;
 
 		}             
@@ -2162,7 +2156,7 @@ void myHaarTraining(const char* dirname,
 
 	//boost过程
 	//计算特征
-	
+    
 	if(memcalcu)
 		icvPrecalculate(0, npos + nneg, training_data, haar_features, numprecalculated, SAVE_FEATURE_MEM, featuredir);
 	else
